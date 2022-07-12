@@ -47,6 +47,11 @@ public extension HTTPRequest {
         get { uri.query?.pathComponents ?? [] }
         set { uri.query = newValue.query.string }
     }
+    
+    var port: Int? {
+        get { uri.port }
+        set { uri.port = newValue }
+    }
 }
 
 public extension HTTPRequest {

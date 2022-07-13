@@ -114,6 +114,13 @@ public extension HTTPRequest {
 
         return copy
     }
+    
+    func port(_ port: Int?) -> HTTPRequest {
+        var copy = self
+        copy.port = port
+        
+        return copy
+    }
 
     func body(_ body: HTTPBody) -> HTTPRequest {
         var copy = self

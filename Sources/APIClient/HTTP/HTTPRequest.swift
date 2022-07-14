@@ -47,6 +47,11 @@ public extension HTTPRequest {
         get { uri.query?.pathComponents ?? [] }
         set { uri.query = newValue.query.string }
     }
+    
+    var port: Int? {
+        get { uri.port }
+        set { uri.port = newValue }
+    }
 }
 
 public extension HTTPRequest {
@@ -107,6 +112,13 @@ public extension HTTPRequest {
             try copy.query.append(encodable)
         } catch {}
 
+        return copy
+    }
+    
+    func port(_ port: Int) -> HTTPRequest {
+        var copy = self
+        copy.port = port
+        
         return copy
     }
 

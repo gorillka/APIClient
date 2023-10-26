@@ -28,6 +28,8 @@ public final class APIClient {
 
     public init(_ configuration: Configurable = Configuration.default) {
         self.configuration = configuration
+
+        NetworkMonitor.shared.startMonitoring()
     }
 
     // MARK: Public Methods
@@ -36,6 +38,11 @@ public final class APIClient {
         _ request: Request<ResponseValue>,
         progress: PassthroughSubject<Double, Never>? = nil
     ) -> AnyPublisher<ResponseValue, Swift.Error> {
+        if !NetworkMonitor.shared.isConnected {
+            return Fail(error: HTTPError.noInternetConnection)
+                .eraseToAnyPublisher()
+        }
+
         let basicResponder = BasicResponder { [weak self] request in
             guard let self = self else { return Combine.Empty().eraseToAnyPublisher() }
 

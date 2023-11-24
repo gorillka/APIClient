@@ -26,7 +26,7 @@ public enum HTTPError: Swift.Error {
     case noResponse
     case noData
     case noInternetConnection
-    
+
     /// Something went wrong while trying to parse response data.
     /// Throw this error if something goes wrong while calling Request.finalize().
     case resourceExtractionError(String)
@@ -65,7 +65,7 @@ extension HTTPError: LocalizedError {
 
         case .noData:
             return "No data."
-            
+
         case .noInternetConnection:
             return "Internet connection is not available"
 
@@ -75,5 +75,11 @@ extension HTTPError: LocalizedError {
         case let .failureDecode(decodable):
             return "Failure to decode \(decodable.self)."
         }
+    }
+}
+
+extension HTTPError: Equatable {
+    public static func == (lhs: HTTPError, rhs: HTTPError) -> Bool {
+        lhs.errorDescription == rhs.errorDescription
     }
 }

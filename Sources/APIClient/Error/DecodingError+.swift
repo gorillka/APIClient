@@ -9,8 +9,8 @@ extension DecodingError: CustomStringConvertible {
         switch self {
         case let DecodingError.dataCorrupted(context):
             return "Data Corrupt: \(context.debugDescription) \(context.codingPathDescription)"
-        case let DecodingError.keyNotFound(key, _):
-            return "Key \(key) not found"
+        case let DecodingError.keyNotFound(key, context):
+            return "Key \(key) not found: \(context.debugDescription) \(context.codingPathDescription)"
         case let DecodingError.valueNotFound(value, context):
             return "Value \(value) not found: \(context.debugDescription) \(context.codingPathDescription)"
         case let DecodingError.typeMismatch(type, context):

@@ -8,27 +8,21 @@ import Combine
 import Foundation
 import Network
 
-public final class NetworkMonitor: ObservableObject {
-    // MARK: Public Properties
-
-    @Published private(set) var path: NWPath?
-
-    static let shared = NetworkMonitor()
-
+final class NetworkMonitor {
     // MARK: Private Properties
 
-    private let monitor: NWPathMonitor
+    private let monitor = NWPathMonitor()
     private let monitorQueue = DispatchQueue(label: "networkMonitor.monitorQueue")
 
-    private init() {
-        self.monitor = NWPathMonitor()
+    // MARK: Lifecycle
+
+    deinit {
+        stopMonitoring()
     }
 
-    func startMonitoring() {
-        monitor.pathUpdateHandler = { [weak self] path in
-            self?.path = path
-        }
+    // MARK: Public Methods
 
+    func startMonitoring() {
         monitor.start(queue: monitorQueue)
     }
 
@@ -37,11 +31,11 @@ public final class NetworkMonitor: ObservableObject {
     }
 }
 
-public extension NetworkMonitor {
-    var isConnected: Bool { path?.status == .satisfied }
+extension NetworkMonitor {
+    var isConnected: Bool { monitor.currentPath.status == .satisfied }
 
     var currentConnectionType: NWInterface.InterfaceType? {
-        guard let path = path else { return nil }
+        let path = monitor.currentPath
 
         return NWInterface.InterfaceType.allCases.first(where: { path.usesInterfaceType($0) })
     }

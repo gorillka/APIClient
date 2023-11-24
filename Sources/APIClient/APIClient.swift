@@ -24,12 +24,18 @@ public final class APIClient {
         delegateQueue: configuration.delegateQueue
     )
 
+    private let networkMonitor = NetworkMonitor()
+
     // MARK: Inits
 
     public init(_ configuration: Configurable = Configuration.default) {
         self.configuration = configuration
 
-        NetworkMonitor.shared.startMonitoring()
+        networkMonitor.startMonitoring()
+    }
+
+    deinit {
+        networkMonitor.stopMonitoring()
     }
 
     // MARK: Public Methods
@@ -38,7 +44,7 @@ public final class APIClient {
         _ request: Request<ResponseValue>,
         progress: PassthroughSubject<Double, Never>? = nil
     ) -> AnyPublisher<ResponseValue, Swift.Error> {
-        if !NetworkMonitor.shared.isConnected {
+        if !networkMonitor.isConnected {
             return Fail(error: HTTPError.noInternetConnection)
                 .eraseToAnyPublisher()
         }

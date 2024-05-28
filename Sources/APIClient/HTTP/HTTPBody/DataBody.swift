@@ -12,7 +12,10 @@ public struct DataBody: HTTPBody {
 
     private let data: Data
 
-    public init(_ data: Data, additionalHeaders: HTTPHeaders = .init()) {
+    public init(
+        _ data: Data,
+        additionalHeaders: HTTPHeaders = .init()
+    ) {
         self.data = data
         self.additionalHeaders = additionalHeaders
     }

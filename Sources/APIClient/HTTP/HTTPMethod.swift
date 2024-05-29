@@ -20,11 +20,11 @@ extension HTTPMethod {
         switch self {
         case .post,
              .put,
-             .patch:
+             .patch,
+             .delete:
             return .yes
 
-        case .get,
-             .delete:
+        case .get:
             fallthrough
 
         default:

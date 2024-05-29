@@ -7,15 +7,15 @@
 import Foundation
 
 public struct JSONBody: HTTPBody {
-    public var additionalHeaders: HTTPHeaders = {
-        var headers = HTTPHeaders()
-        headers.replaceOrAdd(name: .contentType, value: "application/json; charset=utf-8")
-        return headers
-    }()
-
+    public let additionalHeaders: HTTPHeaders
     private let encodeHandler: () throws -> Data
 
-    public init<Value: Encodable>(_ value: Value, encoder: JSONEncoder = .init()) {
+    public init<Value: Encodable>(
+        _ value: Value,
+        additionalHeaders: HTTPHeaders = .init(),
+        encoder: JSONEncoder = .init()
+    ) {
+        self.additionalHeaders = additionalHeaders
         self.encodeHandler = { try encoder.encode(value) }
     }
 
